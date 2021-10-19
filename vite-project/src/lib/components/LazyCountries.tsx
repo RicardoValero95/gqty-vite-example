@@ -1,7 +1,11 @@
 import { FC, useState } from "react";
 import { CountryFilterInput, Maybe, useLazyQuery } from "../gqty";
 
-export const LazyCountries: FC = () => {
+type Props = {
+  suspense: boolean;
+};
+
+export const LazyCountries: FC<Props> = ({ suspense }) => {
   const [getCountries, { isLoading, data, error }] = useLazyQuery(
     (
       { countries },
@@ -10,9 +14,12 @@ export const LazyCountries: FC = () => {
             filter?: Maybe<CountryFilterInput> | undefined;
           }
         | undefined
-    ) => countries(args)
+    ) => countries(args),
+    {
+      suspense,
+    }
   );
-  const [currency, setCurrency] = useState<string | undefined>(undefined);
+  const [currency, setCurrency] = useState<string | undefined>();
 
   const onSearch = () =>
     getCountries({
@@ -45,8 +52,8 @@ export const LazyCountries: FC = () => {
           <>
             <h6>Results</h6>
             <ul>
-              {data?.map((country) => (
-                <li key={country.code}>{country.name}</li>
+              {data?.map((country, i) => (
+                <li key={i}>{country.name}</li>
               ))}
             </ul>
           </>

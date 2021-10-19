@@ -1,5 +1,4 @@
-import { useState } from "react";
-import logo from "./logo.svg";
+import { Suspense, useState } from "react";
 import "./App.css";
 import { LazyCountries } from "./lib/components/LazyCountries";
 
@@ -15,7 +14,13 @@ function App() {
             count is: {count}
           </button>
         </p>
-        <LazyCountries />
+        <p>Non-suspense</p>
+        <LazyCountries suspense={false} />
+        <br />
+        <p>Suspense</p>
+        <Suspense fallback="Loading...">
+          <LazyCountries suspense={true} />
+        </Suspense>
       </header>
     </div>
   );
